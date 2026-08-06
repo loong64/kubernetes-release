@@ -28,10 +28,10 @@ substitutions:
   _KUBE_CROSS_VERSION: 'v0.0.0-go0.0.0-codename.0'
   _REGISTRY: 'fake.repository/registry-name'
 
-images:
-  - 'gcr.io/$PROJECT_ID/k8s-cloud-builder:${_GIT_TAG}-${_CONFIG}'
-  - 'gcr.io/$PROJECT_ID/k8s-cloud-builder:latest-${_CONFIG}'
-  - 'gcr.io/$PROJECT_ID/k8s-cloud-builder:${_KUBE_CROSS_VERSION}'
+# images:
+  # - 'gcr.io/$PROJECT_ID/k8s-cloud-builder:${_GIT_TAG}-${_CONFIG}'
+  # - 'gcr.io/$PROJECT_ID/k8s-cloud-builder:latest-${_CONFIG}'
+  # - 'gcr.io/$PROJECT_ID/k8s-cloud-builder:${_KUBE_CROSS_VERSION}'
 
 tags:
 - 'k8s-cloud-builder'

@@ -3,34 +3,34 @@ variants:
     CONFIG: default
     GO_VERSION: '1.25.6'
     GO_VERSION_TOOLING: '1.25.6'
-    OS_CODENAME: 'bullseye'
+    OS_CODENAME: 'trixie'
   next:
     CONFIG: next
     GO_VERSION: '1.25.6'
     GO_VERSION_TOOLING: '1.25.6'
-    OS_CODENAME: 'bookworm'
+    OS_CODENAME: 'trixie'
   '1.36':
     CONFIG: '1.36'
     GO_VERSION: '1.25.6'
     GO_VERSION_TOOLING: '1.25.6'
-    OS_CODENAME: 'bullseye'
+    OS_CODENAME: 'trixie'
   '1.35':
     CONFIG: '1.35'
     GO_VERSION: '1.25.6'
     GO_VERSION_TOOLING: '1.25.6'
-    OS_CODENAME: 'bullseye'
+    OS_CODENAME: 'trixie'
   '1.34':
     CONFIG: '1.34'
     GO_VERSION: '1.24.12'
     GO_VERSION_TOOLING: '1.24.12'
-    OS_CODENAME: 'bullseye'
+    OS_CODENAME: 'trixie'
   '1.33':
     CONFIG: '1.33'
     GO_VERSION: '1.24.12'
     GO_VERSION_TOOLING: '1.24.12'
-    OS_CODENAME: 'bullseye'
+    OS_CODENAME: 'trixie'
   '1.32':
     CONFIG: '1.32'
     GO_VERSION: '1.24.12'
     GO_VERSION_TOOLING: '1.24.12'
-    OS_CODENAME: 'bullseye'
+    OS_CODENAME: 'trixie'

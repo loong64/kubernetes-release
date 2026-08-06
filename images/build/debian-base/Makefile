@@ -14,20 +14,20 @@
 
 all: all-build
 
-REGISTRY ?= gcr.io/k8s-staging-build-image
+REGISTRY ?= ghcr.io/loong64/build-image
 IMAGE ?= $(REGISTRY)/debian-base
 BUILD_IMAGE ?= debian-build
 
 TAG ?= $(shell git describe --tags --always --dirty)
-IMAGE_VERSION ?= bookworm-v1.0.7
-CONFIG ?= bookworm
+IMAGE_VERSION ?= trixie-v1.0.7
+CONFIG ?= trixie
 
 TAR_FILE ?= rootfs.tar
 ARCH ?= amd64
-ALL_ARCH = amd64 arm arm64 ppc64le s390x
+ALL_ARCH = amd64 arm arm64 loong64 ppc64le s390x
 
-QEMUVERSION=7.2.0-1
-QEMUIMAGE ?= multiarch/qemu-user-static
+QEMUVERSION=latest
+QEMUIMAGE ?= ghcr.io/loong64/tonistiigi/binfmt
 
 # This option is for running docker manifest command
 export DOCKER_CLI_EXPERIMENTAL := enabled
@@ -43,6 +43,10 @@ endif
 ifeq ($(ARCH),arm64)
 	BASEIMAGE?=arm64v8/debian:$(CONFIG)-slim
 	QEMUARCH=aarch64
+endif
+ifeq ($(ARCH),loong64)
+	BASEIMAGE?=loong64v2/debian:$(CONFIG)-slim
+	QEMUARCH=loongarch64
 endif
 ifeq ($(ARCH),ppc64le)
 	BASEIMAGE?=ppc64le/debian:$(CONFIG)-slim
@@ -75,7 +79,7 @@ build: clean
 	umask 0022
 
 	# Enable execution of multi-architecture containers
-	docker run --rm --privileged $(QEMUIMAGE):$(QEMUVERSION) --reset -p yes
+	docker run --rm --privileged $(QEMUIMAGE):$(QEMUVERSION) --install all
 	docker buildx version
 	BUILDER=$(shell docker buildx create --use)
 

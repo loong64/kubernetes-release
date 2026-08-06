@@ -6,7 +6,7 @@ options:
   machineType: 'N1_HIGHCPU_8'
 
 steps:
-  - name: 'gcr.io/k8s-staging-test-infra/gcb-docker-gcloud:v20210917-12df099d55'
+  - name: 'gcr.io/cloud-builders/docker'
     entrypoint: bash
     dir: ./images/build/distroless-iptables
     env:
@@ -45,7 +45,7 @@ tags:
 - ${_CONFIG}
 - ${_GORUNNER_VERSION}
 
-images:
-  - 'gcr.io/$PROJECT_ID/distroless-iptables-amd64:$_IMAGE_VERSION'
-  - 'gcr.io/$PROJECT_ID/distroless-iptables-amd64:$_GIT_TAG-$_CONFIG'
-  - 'gcr.io/$PROJECT_ID/distroless-iptables-amd64:latest-$_CONFIG'
+# images:
+  # - 'gcr.io/$PROJECT_ID/distroless-iptables-amd64:$_IMAGE_VERSION'
+  # - 'gcr.io/$PROJECT_ID/distroless-iptables-amd64:$_GIT_TAG-$_CONFIG'
+  # - 'gcr.io/$PROJECT_ID/distroless-iptables-amd64:latest-$_CONFIG'

@@ -17,10 +17,10 @@ ARG DISTROLESS_IMAGE
 ARG BUILDER_IMAGE
 
 # Get Go from official Alpine image
-FROM golang:${GO_VERSION}-alpine as go-source
+FROM ghcr.io/loong64/golang:${GO_VERSION}-alpine as go-source
 
 # Build the manager binary
-FROM ${BUILDER_IMAGE} as builder
+FROM ghcr.io/loong64/${BUILDER_IMAGE} as builder
 WORKDIR /workspace
 
 # Copy Go installation from official image

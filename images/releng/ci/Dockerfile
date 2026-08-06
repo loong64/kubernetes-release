@@ -16,9 +16,9 @@ ARG GO_VERSION
 ARG OS_CODENAME
 
 # Get Go from official Alpine image
-FROM golang:${GO_VERSION}-alpine as go-source
+FROM ghcr.io/loong64/golang:${GO_VERSION}-alpine as go-source
 
-FROM debian:${OS_CODENAME}-slim
+FROM ghcr.io/loong64/debian:${OS_CODENAME}-slim
 
 # Copy Go installation from official image
 COPY --from=go-source /usr/local/go /usr/local/go

@@ -17,8 +17,8 @@ ARG OS_CODENAME
 
 # The Release Tooling can be compiled with a different version of Go than the
 # the Go version used in the kubernetes/kubernetes active development branch.
-FROM golang:${GO_VERSION_TOOLING}-alpine as go-source
-FROM debian:${OS_CODENAME}-slim AS builder
+FROM ghcr.io/loong64/golang:${GO_VERSION_TOOLING}-alpine as go-source
+FROM ghcr.io/loong64/debian:${OS_CODENAME}-slim AS builder
 
 # Install CA certificates for TLS verification
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
@@ -42,7 +42,7 @@ RUN ./compile-release-tools
 ### Production image
 
 # Includes tools used for building Kubernetes in CI
-FROM debian:${OS_CODENAME}
+FROM ghcr.io/loong64/debian:${OS_CODENAME}
 
 # arg that specifies the image name (for debugging)
 ARG IMAGE_ARG
