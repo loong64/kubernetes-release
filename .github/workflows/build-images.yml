@@ -1,0 +1,154 @@
+name: Build and publish build images
+
+on:
+  push:
+    tags:
+      - '**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-images-publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and publish ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [cross]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: docker/setup-qemu-action@v4
+        with:
+          image: ghcr.io/loong64/tonistiigi/binfmt:latest
+      - uses: docker/setup-buildx-action@v4
+      - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
+        with:
+          go-version-file: go.mod
+      - name: Install gcbuilder
+        run: |
+          mkdir -p "$RUNNER_TEMP/gcbuilder"
+          go build -o "$RUNNER_TEMP/gcbuilder/gcbuilder" ./cmd/gcbuilder
+          sudo install -m 0755 "$RUNNER_TEMP/gcbuilder/gcbuilder" /usr/local/bin/gcbuilder
+      - name: Install gcloud-local
+        run: |
+          mkdir -p "$RUNNER_TEMP/gcloud-local"
+          wget -qO - https://github.com/loong64/gcloud-local/releases/latest/download/gcloud-local_linux_amd64.tar.gz | tar -xz --strip-components=1 -C "$RUNNER_TEMP/gcloud-local"
+          sudo install -m 0755 "$RUNNER_TEMP/gcloud-local/gcloud-local" /usr/local/bin/gcloud
+          gcloud --version
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and publish ${{ matrix.image }} variants
+        env:
+          REGISTRY: ghcr.io/loong64/build-image
+          PULL_BASE_REF: tag
+        run: |
+          gcbuilder \
+            --config-dir "images/build/${{ matrix.image }}" \
+            --build-dir . \
+            --env-passthrough REGISTRY,PULL_BASE_REF
+
+  build-base:
+    name: Build and publish ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [debian-base, go-runner]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: docker/setup-qemu-action@v4
+        with:
+          image: ghcr.io/loong64/tonistiigi/binfmt:latest
+      - uses: docker/setup-buildx-action@v4
+      - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
+        with:
+          go-version-file: go.mod
+      - name: Install gcbuilder
+        run: |
+          mkdir -p "$RUNNER_TEMP/gcbuilder"
+          go build -o "$RUNNER_TEMP/gcbuilder/gcbuilder" ./cmd/gcbuilder
+          sudo install -m 0755 "$RUNNER_TEMP/gcbuilder/gcbuilder" /usr/local/bin/gcbuilder
+      - name: Install gcloud-local
+        run: |
+          mkdir -p "$RUNNER_TEMP/gcloud-local"
+          wget -qO - https://github.com/loong64/gcloud-local/releases/latest/download/gcloud-local_linux_amd64.tar.gz | tar -xz --strip-components=1 -C "$RUNNER_TEMP/gcloud-local"
+          sudo install -m 0755 "$RUNNER_TEMP/gcloud-local/gcloud-local" /usr/local/bin/gcloud
+          gcloud --version
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and publish ${{ matrix.image }} variants
+        env:
+          REGISTRY: ghcr.io/loong64/build-image
+          PULL_BASE_REF: tag
+        run: |
+          gcbuilder \
+            --config-dir "images/build/${{ matrix.image }}" \
+            --build-dir . \
+            --env-passthrough REGISTRY,PULL_BASE_REF
+
+  build-dependent:
+    name: Build and publish ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    # Matrix dependencies apply to the whole job, so wait for both base images.
+    needs: build-base
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [setcap, distroless-iptables]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: docker/setup-qemu-action@v4
+        with:
+          image: ghcr.io/loong64/tonistiigi/binfmt:latest
+      - uses: docker/setup-buildx-action@v4
+      - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
+        with:
+          go-version-file: go.mod
+      - name: Install gcbuilder
+        run: |
+          mkdir -p "$RUNNER_TEMP/gcbuilder"
+          go build -o "$RUNNER_TEMP/gcbuilder/gcbuilder" ./cmd/gcbuilder
+          sudo install -m 0755 "$RUNNER_TEMP/gcbuilder/gcbuilder" /usr/local/bin/gcbuilder
+      - name: Install gcloud-local
+        run: |
+          mkdir -p "$RUNNER_TEMP/gcloud-local"
+          wget -qO - https://github.com/loong64/gcloud-local/releases/latest/download/gcloud-local_linux_amd64.tar.gz | tar -xz --strip-components=1 -C "$RUNNER_TEMP/gcloud-local"
+          sudo install -m 0755 "$RUNNER_TEMP/gcloud-local/gcloud-local" /usr/local/bin/gcloud
+          gcloud --version
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and publish ${{ matrix.image }} variants
+        env:
+          REGISTRY: ghcr.io/loong64/build-image
+          PULL_BASE_REF: tag
+        run: |
+          gcbuilder \
+            --config-dir "images/build/${{ matrix.image }}" \
+            --build-dir . \
+            --env-passthrough REGISTRY,PULL_BASE_REF

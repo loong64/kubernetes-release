@@ -1,16 +1,16 @@
 variants:
-  distroless-bookworm-go1.26:
-    CONFIG: 'distroless-bookworm'
+  distroless-trixie-go1.26:
+    CONFIG: 'distroless-trixie'
     IMAGE_VERSION: 'v0.9.0'
-    BASEIMAGE: 'debian:bookworm-slim'
-    GORUNNER_VERSION: 'v2.4.0-go1.26.0-bookworm.0'
-  distroless-bookworm-go1.25:
-    CONFIG: 'distroless-bookworm'
+    BASEIMAGE: 'debian:trixie-slim'
+    GORUNNER_VERSION: 'v2.4.0-go1.26.0-trixie.0'
+  distroless-trixie-go1.25:
+    CONFIG: 'distroless-trixie'
     IMAGE_VERSION: 'v0.8.8'
-    BASEIMAGE: 'debian:bookworm-slim'
-    GORUNNER_VERSION: 'v2.4.0-go1.25.7-bookworm.0'
-  distroless-bookworm-go1.24:
-    CONFIG: 'distroless-bookworm'
+    BASEIMAGE: 'debian:trixie-slim'
+    GORUNNER_VERSION: 'v2.4.0-go1.25.7-trixie.0'
+  distroless-trixie-go1.24:
+    CONFIG: 'distroless-trixie'
     IMAGE_VERSION: 'v0.7.15'
-    BASEIMAGE: 'debian:bookworm-slim'
-    GORUNNER_VERSION: 'v2.4.0-go1.24.13-bookworm.0'
+    BASEIMAGE: 'debian:trixie-slim'
+    GORUNNER_VERSION: 'v2.4.0-go1.24.13-trixie.0'
