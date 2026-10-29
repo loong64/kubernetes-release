@@ -15,7 +15,7 @@
 ARG BASEIMAGE
 ARG GORUNNERIMAGE
 # Using directly debian base, as we are going to just copy the required binaries
-FROM ${BASEIMAGE} as build
+FROM ghcr.io/loong64/${BASEIMAGE} as build
 
 COPY stage-binary-and-deps.sh /
 COPY stage-binaries-from-package.sh /
@@ -43,7 +43,7 @@ RUN apt -y update && \
 
 RUN curl -o "${STAGE_DIR}"/iptables-wrapper-installer.sh https://raw.githubusercontent.com/kubernetes-sigs/iptables-wrappers/v2/iptables-wrapper-installer.sh && \
     chmod +x "${STAGE_DIR}"/iptables-wrapper-installer.sh && \
-    ln -sf /bin/dash "${STAGE_DIR}"/bin/sh
+    ln -sf /usr/bin/dash "${STAGE_DIR}"/usr/bin/sh
 
 # we're going to borrow the /go-runner binary in the final image
 # dedupe this binary by just copying it from the go-runner image
@@ -51,7 +51,7 @@ FROM ${GORUNNERIMAGE} as gorunner
 
 # We need to use distroless:static here as tzdata, and some other base packages are required.
 # We supply our own C libraries alongside some additional C binaries.
-FROM gcr.io/distroless/static-debian13 as intermediate
+FROM ghcr.io/loong64/distroless/static-debian13 as intermediate
 
 ARG SKIP_WRAPPER_CHECK
 

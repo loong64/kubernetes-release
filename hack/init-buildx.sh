@@ -53,6 +53,7 @@ if ! grep -q "^Driver: docker$"  <<<"${current_builder}" \
   && grep -q "linux/amd64" <<<"${current_builder}" \
   && grep -q "linux/arm" <<<"${current_builder}" \
   && grep -q "linux/arm64" <<<"${current_builder}" \
+  && grep -q "linux/loong64" <<<"${current_builder}" \
   && grep -q "linux/ppc64le" <<<"${current_builder}" \
   && grep -q "linux/s390x" <<<"${current_builder}"; then
   exit 0
@@ -61,7 +62,7 @@ fi
 # Ensure qemu is in binfmt_misc
 # NOTE: Please always pin this to a digest for predictability/auditability
 # Last updated: 2022-11-02
-BINFMT_IMAGE="${BINFMT_IMAGE:-tonistiigi/binfmt:qemu-v7.0.0@sha256:66e11bea77a5ea9d6f0fe79b57cd2b189b5d15b93a2bdb925be22949232e4e55}"
+BINFMT_IMAGE="${BINFMT_IMAGE:-ghcr.io/loong64/tonistiigi/binfmt:latest}"
 if [ "$(uname)" == 'Linux' ]; then
   docker run --rm --privileged "${BINFMT_IMAGE}" --install all
 fi
