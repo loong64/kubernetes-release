@@ -1,11 +1,11 @@
 # See https://cloud.google.com/cloud-build/docs/build-config
-timeout: 3600s
+timeout: 18000s
 
 options:
   substitutionOption: ALLOW_LOOSE
 
 steps:
-  - name: 'registry.k8s.io/releng/gcb-docker-gcloud:v20260806'
+  - name: 'ghcr.io/loong64/cloud-builders/docker'
     dir: ./images/build/cross
     env:
     - TAG=$_GIT_TAG
@@ -42,7 +42,7 @@ substitutions:
   _OS_CODENAME: 'codename'
   _REVISION: '0'
   _PROTOBUF_VERSION: '0.0.0'
-  _PLATFORMS: 'linux/amd64 linux/arm64 linux/ppc64le linux/s390x'
+  _PLATFORMS: 'linux/amd64 linux/arm64 linux/loong64 linux/ppc64le linux/s390x'
   _REGISTRY: 'fake.repository/registry-name'
 
 tags:

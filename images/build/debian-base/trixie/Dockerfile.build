@@ -14,7 +14,7 @@
 
 ARG BASEIMAGE
 
-FROM $BASEIMAGE AS certs
+FROM ghcr.io/loong64/$BASEIMAGE AS certs
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -22,7 +22,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y ca-certificates
 
-FROM $BASEIMAGE
+FROM ghcr.io/loong64/$BASEIMAGE
 
 ENV DEBIAN_FRONTEND=noninteractive
 

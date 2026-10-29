@@ -1,27 +1,22 @@
 variants:
-  distroless-trixie-go1.27:
-    CONFIG: 'distroless-trixie'
-    IMAGE_VERSION: 'v0.11.2'
-    BASEIMAGE: 'debian:trixie-slim'
-    GORUNNER_VERSION: 'v2.4.0-go1.27.3-trixie.0'
   # NOTE: the bookworm variants pin a dated base tag instead of the floating
   # debian:bookworm-slim. As of the 2026-08-03 build, the official bookworm-slim
   # image no longer publishes linux/s390x (bookworm is oldstable), which breaks
   # sub-push-image-s390x. bookworm-20260713-slim is the last build that still
   # ships s390x. The Dockerfile runs apt-get dist-upgrade, so packages are still
   # brought up to date at build time.
-  distroless-bookworm-go1.27:
-    CONFIG: 'distroless-bookworm'
+  distroless-trixie-go1.27:
+    CONFIG: 'distroless-trixie'
     IMAGE_VERSION: 'v0.10.2'
-    BASEIMAGE: 'debian:bookworm-20260713-slim'
-    GORUNNER_VERSION: 'v2.4.0-go1.27.3-bookworm.0'
-  distroless-bookworm-go1.26:
-    CONFIG: 'distroless-bookworm'
+    BASEIMAGE: 'debian:trixie-slim'
+    GORUNNER_VERSION: 'v2.4.0-go1.27.3-trixie.0'
+  distroless-trixie-go1.26:
+    CONFIG: 'distroless-trixie'
     IMAGE_VERSION: 'v0.9.9'
-    BASEIMAGE: 'debian:bookworm-20260713-slim'
-    GORUNNER_VERSION: 'v2.4.0-go1.26.10-bookworm.0'
-  distroless-bookworm-go1.25:
-    CONFIG: 'distroless-bookworm'
+    BASEIMAGE: 'debian:trixie-slim'
+    GORUNNER_VERSION: 'v2.4.0-go1.26.10-trixie.0'
+  distroless-trixie-go1.25:
+    CONFIG: 'distroless-trixie'
     IMAGE_VERSION: 'v0.8.14'
-    BASEIMAGE: 'debian:bookworm-20260713-slim'
-    GORUNNER_VERSION: 'v2.4.0-go1.25.12-bookworm.0'
+    BASEIMAGE: 'debian:trixie-slim'
+    GORUNNER_VERSION: 'v2.4.0-go1.25.12-trixie.0'

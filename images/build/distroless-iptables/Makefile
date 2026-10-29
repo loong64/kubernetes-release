@@ -17,14 +17,14 @@ include $(CURDIR)/../../Makefile.common-image
 
 IMGNAME = distroless-iptables
 IMAGE_VERSION ?= v0.10.2
-CONFIG ?= distroless-bookworm
-BASEIMAGE ?= debian:bookworm-20260713-slim
-GORUNNER_VERSION ?= v2.4.0-go1.27.3-bookworm.0
+CONFIG ?= distroless-trixie
+BASEIMAGE ?= debian:trixie-slim
+GORUNNER_VERSION ?= v2.4.0-go1.27.3-trixie.0
 
-BASE_REGISTRY ?= registry.k8s.io/build-image
+BASE_REGISTRY ?= ghcr.io/loong64/build-image
 GORUNNERIMAGE ?= $(BASE_REGISTRY)/go-runner:$(GORUNNER_VERSION)
 
-PLATFORMS ?= linux/amd64 linux/arm64 linux/ppc64le linux/s390x
+PLATFORMS ?= linux/amd64 linux/arm64 linux/loong64 linux/ppc64le linux/s390x
 
 BUILD_CONTEXT = $(CONFIG)
 

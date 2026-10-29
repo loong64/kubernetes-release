@@ -20,10 +20,10 @@ APP_VERSION = $(shell cat VERSION)
 GO_MAJOR_VERSION ?= 1.27
 REVISION ?= 0
 GO_VERSION ?= 1.27.3
-OS_CODENAME ?= bookworm-slim
+OS_CODENAME ?= trixie-slim
 
 # Build args
-DISTROLESS_REGISTRY ?= gcr.io/distroless
+DISTROLESS_REGISTRY ?= ghcr.io/loong64/distroless
 DISTROLESS_IMAGE ?= static-debian13
 BUILDER_IMAGE ?= debian:$(OS_CODENAME)
 
@@ -33,7 +33,7 @@ BUILD_METADATA = go$(GO_VERSION)-$(OS_CODENAME).$(REVISION)
 
 IMAGE_VERSION = $(APP_VERSION)-$(BUILD_METADATA)
 
-PLATFORMS ?= linux/amd64 linux/arm64 linux/ppc64le linux/s390x
+PLATFORMS ?= linux/amd64 linux/arm64 linux/loong64 linux/ppc64le linux/s390x
 
 HOST_GOOS ?= $(shell go env GOOS)
 HOST_GOARCH ?= $(shell go env GOARCH)

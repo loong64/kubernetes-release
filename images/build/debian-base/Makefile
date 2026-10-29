@@ -29,7 +29,7 @@ TAG ?= $(shell git describe --tags --always --dirty)
 
 TAR_FILE ?= rootfs.tar
 
-PLATFORMS ?= linux/amd64 linux/arm64 linux/ppc64le linux/s390x
+PLATFORMS ?= linux/amd64 linux/arm64 linux/loong64 linux/ppc64le linux/s390x
 
 ARCHS = $(patsubst linux/%,%,$(PLATFORMS))
 

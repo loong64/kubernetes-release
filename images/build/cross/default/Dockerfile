@@ -15,10 +15,10 @@
 # This file creates a standard build environment for building cross
 # platform go binary for the architecture kubernetes cares about.
 
-ARG BASEIMAGE=debian:stable-slim
+ARG BASEIMAGE=debian:trixie-slim
 ARG GO_VERSION=1
-FROM golang:${GO_VERSION}-alpine AS go-source
-FROM ${BASEIMAGE}
+FROM ghcr.io/loong64/golang:${GO_VERSION}-alpine AS go-source
+FROM ghcr.io/loong64/${BASEIMAGE}
 
 ##------------------------------------------------------------
 # global ARGs & ENVs
@@ -28,8 +28,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # the default value for KUBE_DYNAMIC_CROSSPLATFORMS and KUBE_CROSSPLATFORMS is set for
 # backward compatibility with the old Dockerfile. 
-ARG KUBE_DYNAMIC_CROSSPLATFORMS="arm64 armhf i386 ppc64el s390x"
-ARG KUBE_CROSSPLATFORMS="linux/386 linux/arm linux/arm64 linux/ppc64le linux/s390x darwin/amd64 windows/amd64 windows/386"
+ARG KUBE_DYNAMIC_CROSSPLATFORMS="arm64 armhf i386 loong64 ppc64el s390x"
+ARG KUBE_CROSSPLATFORMS="linux/386 linux/arm linux/arm64 linux/loong64 linux/ppc64le linux/s390x darwin/amd64 windows/amd64 windows/386"
 
 ENV KUBE_DYNAMIC_CROSSPLATFORMS=${KUBE_DYNAMIC_CROSSPLATFORMS}
 ENV KUBE_CROSSPLATFORMS=${KUBE_CROSSPLATFORMS}
@@ -89,18 +89,23 @@ RUN targetArch=$(echo $TARGETPLATFORM | cut -f2 -d '/') \
   && if [ ${targetArch} = "amd64" ]; then \
   apt-get update \
   && apt-get install -y build-essential mingw-w64 \
-  && for platform in ${KUBE_DYNAMIC_CROSSPLATFORMS}; do apt-get install -y crossbuild-essential-${platform}; done \
+  && for platform in ${KUBE_DYNAMIC_CROSSPLATFORMS}; do \
+      case ${platform} in \
+        "loong64") apt-get install -y g++-loongarch64-linux-gnu ;; \
+        *) apt-get install -y crossbuild-essential-${platform} ;; \
+      esac; \
+    done \
   fi
 
 RUN targetArch=$(echo $TARGETPLATFORM | cut -f2 -d '/') \
   && if [ ${targetArch} = "arm64" ]; then \
   apt-get update \
   && apt-get install -y build-essential gcc-x86-64-linux-gnu \
-  && apt-get install -y crossbuild-essential-ppc64el crossbuild-essential-s390x; \
+  && apt-get install -y crossbuild-essential-ppc64el crossbuild-essential-s390x g++-loongarch64-linux-gnu; \
   fi
 
 RUN targetArch=$(echo $TARGETPLATFORM | cut -f2 -d '/') \
-  && if [ ${targetArch} = "ppc64le" ] || [ ${targetArch} = "s390x" ]; then \
+  && if [ ${targetArch} = "loong64" ] || [ ${targetArch} = "ppc64le" ] || [ ${targetArch} = "s390x" ]; then \
   apt-get update \
   && apt-get install -y build-essential; \
   fi
@@ -111,13 +116,20 @@ RUN targetArch=$(echo $TARGETPLATFORM | cut -f2 -d '/') \
   ZIPNAME="protoc-${PROTOBUF_VERSION}-linux-x86_64.zip"; \
   elif [ ${targetArch} = "arm64" ]; then \
   ZIPNAME="protoc-${PROTOBUF_VERSION}-linux-aarch_64.zip"; \
+  elif [ ${targetArch} = "loong64" ]; then \
+  ZIPNAME="protoc-${PROTOBUF_VERSION}-linux-loong64.zip"; \
   elif [ ${targetArch} = "ppc64le" ]; then \
   ZIPNAME="protoc-${PROTOBUF_VERSION}-linux-ppcle_64.zip"; \
   elif [ ${targetArch} = "s390x" ]; then \
   ZIPNAME="protoc-${PROTOBUF_VERSION}-linux-s390_64.zip"; \
   fi \
   && mkdir /tmp/protoc && cd /tmp/protoc \
-  && wget "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/${ZIPNAME}" \
+  && \
+  if [ ${targetArch} = "loong64" ]; then \
+    wget "https://github.com/Loongson-Cloud-Community/protobuf/releases/download/v${PROTOBUF_VERSION}/${ZIPNAME}"; \
+  else \
+    wget "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/${ZIPNAME}"; \
+  fi \
   && unzip "${ZIPNAME}" \
   && chmod -R +rX /tmp/protoc \
   && cp -pr bin /usr/local \

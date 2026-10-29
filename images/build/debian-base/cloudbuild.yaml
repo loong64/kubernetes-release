@@ -5,7 +5,7 @@ options:
   substitutionOption: ALLOW_LOOSE
 
 steps:
-  - name: 'registry.k8s.io/releng/gcb-docker-gcloud:v20260806'
+  - name: 'ghcr.io/loong64/cloud-builders/docker'
     dir: ./images/build/debian-base
     env:
       - REGISTRY=$_REGISTRY

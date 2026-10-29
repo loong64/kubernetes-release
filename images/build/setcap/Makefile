@@ -16,15 +16,15 @@
 include $(CURDIR)/../../Makefile.common-image
 
 IMGNAME = setcap
-IMAGE_VERSION ?= bookworm-v1.0.9
-CONFIG ?= bookworm
-DEBIAN_BASE_VERSION ?= bookworm-v1.0.9
+IMAGE_VERSION ?= trixie-v1.0.9
+CONFIG ?= trixie
+DEBIAN_BASE_VERSION ?= trixie-v1.0.9
 
 # Build args
-BASE_REGISTRY ?= registry.k8s.io/build-image
+BASE_REGISTRY ?= ghcr.io/loong64/build-image
 BASEIMAGE ?= $(BASE_REGISTRY)/debian-base:$(DEBIAN_BASE_VERSION)
 
-PLATFORMS ?= linux/amd64 linux/arm64 linux/ppc64le linux/s390x
+PLATFORMS ?= linux/amd64 linux/arm64 linux/loong64 linux/ppc64le linux/s390x
 
 BUILD_ARGS = --pull \
              --build-arg=BASEIMAGE=$(BASEIMAGE)
