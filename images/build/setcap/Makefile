@@ -14,23 +14,23 @@
 
 .PHONY:	build push all all-build all-push-images all-push push-manifest
 
-REGISTRY?="gcr.io/k8s-staging-build-image"
+REGISTRY?="ghcr.io/loong64/build-image"
 IMAGE=$(REGISTRY)/setcap
 
 TAG ?= $(shell git describe --tags --always --dirty)
-IMAGE_VERSION ?= bookworm-v1.0.7
-CONFIG ?= bookworm
-DEBIAN_BASE_VERSION ?= bookworm-v1.0.7
+IMAGE_VERSION ?= trixie-v1.0.7
+CONFIG ?= trixie
+DEBIAN_BASE_VERSION ?= trixie-v1.0.7
 
 ARCH?=amd64
-ALL_ARCH = amd64 arm arm64 ppc64le s390x
+ALL_ARCH = amd64 arm arm64 loong64 ppc64le s390x
 
-BASE_REGISTRY?=registry.k8s.io/build-image
+BASE_REGISTRY?=ghcr.io/loong64/build-image
 BASEIMAGE?=$(BASE_REGISTRY)/debian-base-$(ARCH):$(DEBIAN_BASE_VERSION)
 
 # Build args
-QEMUVERSION=7.2.0-1
-QEMUIMAGE ?= multiarch/qemu-user-static
+QEMUVERSION=latest
+QEMUIMAGE ?= ghcr.io/loong64/tonistiigi/binfmt
 
 # This option is for running docker manifest command
 export DOCKER_CLI_EXPERIMENTAL := enabled
@@ -40,7 +40,7 @@ build:
 	umask 0022
 
 	# Enable execution of multi-architecture containers
-	docker run --rm --privileged $(QEMUIMAGE):$(QEMUVERSION) --reset -p yes
+	docker run --rm --privileged $(QEMUIMAGE):$(QEMUVERSION) --install all
 	docker buildx version
 	BUILDER=$(shell docker buildx create --use)
 	docker buildx build \

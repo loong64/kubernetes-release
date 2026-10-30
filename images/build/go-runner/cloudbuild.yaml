@@ -20,7 +20,7 @@ steps:
       - '--certificate-identity=keyless@distroless.iam.gserviceaccount.com'
       - 'gcr.io/distroless/$_DISTROLESS_IMAGE'
 
-  - name: 'gcr.io/k8s-staging-test-infra/gcb-docker-gcloud:v20260205-38cfa9523f'
+  - name: 'ghcr.io/loong64/cloud-builders/docker'
     entrypoint: 'bash'
     dir: ./images/build/go-runner
     env:
@@ -68,7 +68,7 @@ tags:
   - ${_GO_VERSION}
   - ${_DISTROLESS_IMAGE}
 
-images:
-  - 'gcr.io/$PROJECT_ID/go-runner-amd64:$_IMAGE_VERSION'
-  - 'gcr.io/$PROJECT_ID/go-runner-amd64:$_GIT_TAG-$_CONFIG'
-  - 'gcr.io/$PROJECT_ID/go-runner-amd64:latest-$_CONFIG'
+# images:
+  # - 'gcr.io/$PROJECT_ID/go-runner-amd64:$_IMAGE_VERSION'
+  # - 'gcr.io/$PROJECT_ID/go-runner-amd64:$_GIT_TAG-$_CONFIG'
+  # - 'gcr.io/$PROJECT_ID/go-runner-amd64:latest-$_CONFIG'

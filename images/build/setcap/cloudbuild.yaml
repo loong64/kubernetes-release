@@ -6,7 +6,7 @@ options:
   machineType: 'N1_HIGHCPU_8'
 
 steps:
-  - name: 'gcr.io/k8s-staging-test-infra/gcb-docker-gcloud:v20260205-38cfa9523f'
+  - name: 'ghcr.io/loong64/cloud-builders/docker'
     entrypoint: bash
     dir: ./images/build/setcap
     env:
@@ -43,7 +43,7 @@ tags:
 - ${_CONFIG}
 - ${_DEBIAN_BASE_VERSION}
 
-images:
-  - 'gcr.io/$PROJECT_ID/setcap-amd64:$_IMAGE_VERSION'
-  - 'gcr.io/$PROJECT_ID/setcap-amd64:$_GIT_TAG-$_CONFIG'
-  - 'gcr.io/$PROJECT_ID/setcap-amd64:latest-$_CONFIG'
+# images:
+  # - 'gcr.io/$PROJECT_ID/setcap-amd64:$_IMAGE_VERSION'
+  # - 'gcr.io/$PROJECT_ID/setcap-amd64:$_GIT_TAG-$_CONFIG'
+  # - 'gcr.io/$PROJECT_ID/setcap-amd64:latest-$_CONFIG'
