@@ -1,11 +1,11 @@
 # See https://cloud.google.com/cloud-build/docs/build-config
-timeout: 9000s
+timeout: 18000s
 
 options:
   substitutionOption: ALLOW_LOOSE
 
 steps:
-  - name: 'gcr.io/k8s-staging-test-infra/gcb-docker-gcloud:v20260205-38cfa9523f'
+  - name: 'ghcr.io/loong64/cloud-builders/docker'
     entrypoint: 'bash'
     dir: ./images/build/cross
     env:

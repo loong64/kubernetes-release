@@ -15,7 +15,7 @@
 ARG BASEIMAGE
 ARG GORUNNERIMAGE
 # Using directly debian base, as we are going to just copy the required binaries
-FROM ${BASEIMAGE} AS build
+FROM ghcr.io/loong64/${BASEIMAGE} AS build
 
 # Install compilation toolchain and dependencies
 RUN apt-get -y update && \
@@ -70,7 +70,7 @@ FROM ${GORUNNERIMAGE} AS gorunner
 
 # We need to use distroless:static here as tzdata, and some other base packages are required.
 # We supply our own C libraries alongside some additional C binaries.
-FROM gcr.io/distroless/static-debian13 AS intermediate
+FROM ghcr.io/loong64/distroless/static-debian13 AS intermediate
 
 ARG SKIP_WRAPPER_CHECK
 
